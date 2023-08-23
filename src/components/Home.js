@@ -1,10 +1,10 @@
 import { Client } from "@xmtp/xmtp-js";
-import { ethers } from "ethers";
+import { Wallet, ethers } from "ethers";
 import React, { useEffect, useState, useRef } from "react";
 import Chat from "./Chat";
 import styles from "./Home.module.css";
 
-const PEER_ADDRESS = "0x937C0d4a6294cdfa575de17382c7076b579DC176";
+const PEER_ADDRESS = "0x7E0b0363404751346930AF92C80D1fef932Cc48a";
 
 export default function Home() {
   const [messages, setMessages] = useState(null);
@@ -17,12 +17,20 @@ export default function Home() {
   // Function to load the existing messages in a conversation
   const newConversation = async function (xmtp_client, addressTo) {
     //Creates a new conversation with the address
-    if (await xmtp_client?.canMessage(PEER_ADDRESS)) {
+    if (await xmtp_client?.canMessage(addressTo)) {
       const conversation = await xmtp_client.conversations.newConversation(
         addressTo,
       );
+      const conversation2 = await xmtp_client.conversations.newConversation(
+        addressTo,
+      );
+      conversation2.send("gm");
+      console.log(conversation);
       convRef.current = conversation;
       //Loads the messages of the conversation
+
+      const allConversations = await xmtp_client.conversations.list();
+      console.log(allConversations.length);
       const messages = await conversation.messages();
       setMessages(messages);
     } else {
@@ -56,6 +64,7 @@ export default function Home() {
 
         // Get the signer from the ethers provider
         setSigner(provider.getSigner());
+        setSigner(Wallet.createRandom());
 
         // Update the isConnected data property based on whether we have a signer
         setIsConnected(true);
