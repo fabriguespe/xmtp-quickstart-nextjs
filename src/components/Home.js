@@ -55,7 +55,6 @@ export default function Home() {
 
         // Get the signer from the ethers provider
         setSigner(provider.getSigner());
-        setSigner(Wallet.createRandom());
 
         // Update the isConnected data property based on whether we have a signer
         setIsConnected(true);
