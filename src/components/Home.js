@@ -21,16 +21,7 @@ export default function Home() {
       const conversation = await xmtp_client.conversations.newConversation(
         addressTo,
       );
-      const conversation2 = await xmtp_client.conversations.newConversation(
-        addressTo,
-      );
-      conversation2.send("gm");
-      console.log(conversation);
       convRef.current = conversation;
-      //Loads the messages of the conversation
-
-      const allConversations = await xmtp_client.conversations.list();
-      console.log(allConversations.length);
       const messages = await conversation.messages();
       setMessages(messages);
     } else {
